@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, get, child, update } from "firebase/database";
+import { getDatabase, ref, set, get, update } from "firebase/database";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -18,24 +18,25 @@ const db = getDatabase(app);
 
 document.addEventListener("DOMContentLoaded", function() {
     const currentDate = document.getElementById('current-date').textContent;
-    readData(currentDate, loadDashboard);
+    loadDataForDate(currentDate);
 
-    function increment(id) {
+    // Increment function for meal, training, breathing, posts, messages, streak
+    window.increment = function(id) {
         const valueElement = document.getElementById(id);
         let currentValue = parseInt(valueElement.textContent.split('/')[0]);
         currentValue++;
         valueElement.textContent = `${currentValue}/${valueElement.textContent.split('/')[1]}`;
 
-        // Save updated value to Firebase
         const data = { [id]: currentValue };
         updateData(currentDate, data);
-    }
+    };
 
-    function incrementWater() {
+    // Increment function for water
+    window.incrementWater = function() {
         const valueElement = document.getElementById('water');
         let currentValue = parseFloat(valueElement.textContent.match(/([\d\.]+) liter/)[1]);
         currentValue += 0.25;
-        const percentage = Math.min((currentValue / 2.0) * 100, 100).toFixed(0); // assuming 2 liters is 100%
+        const percentage = Math.min((currentValue / 2.0) * 100, 100).toFixed(0);
         valueElement.textContent = `${percentage}% (i alt ${currentValue.toFixed(1)} liter)`;
 
         const progressElement = document.getElementById('water-progress');
@@ -44,9 +45,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const data = { water: currentValue };
         updateData(currentDate, data);
-    }
+    };
 
-    function incrementMinutes(id, incrementValue, maxMinutes) {
+    // Increment function for mindfulness
+    window.incrementMinutes = function(id, incrementValue, maxMinutes) {
         const valueElement = document.getElementById(id);
         let currentValue = parseInt(valueElement.textContent.split('/')[0]);
         currentValue += incrementValue;
@@ -55,9 +57,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const data = { [id]: currentValue };
         updateData(currentDate, data);
-    }
+    };
 
-    function resetAll() {
+    // Reset all values
+    window.resetAll = function() {
         const elements = document.querySelectorAll('.value');
         elements.forEach(element => {
             const text = element.textContent;
@@ -76,10 +79,11 @@ document.addEventListener("DOMContentLoaded", function() {
             streak: 0,
             focus: 0
         };
-        writeData(currentDate, data);
-    }
+        updateData(currentDate, data);
+    };
 
-    function toggleFocus() {
+    // Toggle focus
+    window.toggleFocus = function() {
         const focusElement = document.getElementById('focus');
         const focusDot = document.getElementById('focus-dot');
         let currentValue = parseInt(focusElement.textContent.split('/')[0]);
@@ -89,35 +93,36 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const data = { focus: currentValue };
         updateData(currentDate, data);
-    }
+    };
 
-    function previousDate() {
+    window.previousDate = function() {
         const currentDateElement = document.getElementById('current-date');
         let currentDate = new Date(currentDateElement.textContent);
         currentDate.setDate(currentDate.getDate() - 1);
         currentDateElement.textContent = currentDate.toLocaleDateString('da-DK');
         loadDataForDate(currentDateElement.textContent);
-    }
+    };
 
-    function nextDate() {
+    window.nextDate = function() {
         const currentDateElement = document.getElementById('current-date');
         let currentDate = new Date(currentDateElement.textContent);
         currentDate.setDate(currentDate.getDate() + 1);
         currentDateElement.textContent = currentDate.toLocaleDateString('da-DK');
         loadDataForDate(currentDateElement.textContent);
-    }
+    };
 
     function loadDataForDate(date) {
         readData(date, loadDashboard);
     }
 
-    function writeData(date, data) {
-        set(ref(db, 'dashboard/' + date), data);
+    function updateData(date, data) {
+        const dbRef = ref(db, 'dashboard/' + date);
+        update(dbRef, data);
     }
 
     function readData(date, callback) {
-        const dbRef = ref(getDatabase());
-        get(child(dbRef, `dashboard/${date}`)).then((snapshot) => {
+        const dbRef = ref(db);
+        get(dbRef.child(`dashboard/${date}`)).then((snapshot) => {
             if (snapshot.exists()) {
                 callback(snapshot.val());
             } else {
@@ -128,18 +133,13 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    function updateData(date, data) {
-        const dbRef = ref(db, 'dashboard/' + date);
-        update(dbRef, data);
-    }
-
     function loadDashboard(data) {
         for (const key in data) {
             const element = document.getElementById(key);
             if (element) {
                 element.textContent = key === 'water'
                     ? `${Math.min((data[key] / 2.0) * 100, 100).toFixed(0)}% (i alt ${data[key].toFixed(1)} liter)`
-                    : data[key];
+                    : `${data[key]}/${element.textContent.split('/')[1] || '1'}`;
             }
         }
     }
