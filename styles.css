@@ -1,0 +1,161 @@
+body {
+    background-color: black;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding-top: 35px; /* Add padding to move the text higher */
+}
+
+#dashboard {
+    width: 80%;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    margin: 10px;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    font-size: 1.8em; /* Slightly smaller text size */
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 10px;
+}
+
+.title {
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.title:hover {
+    transform: scale(1.1);
+    color: #00bfff;
+}
+
+.value {
+    margin-left: 10px;
+    transition: opacity 0.2s ease;
+}
+
+.value.update {
+    animation: pulse 0.5s;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.progress-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.progress-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(
+        #00bfff 0%,
+        #00bfff var(--progress-percentage),
+        #e0e0e0 var(--progress-percentage)
+    );
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    color: white;
+    font-size: 1.5em;
+    font-weight: bold;
+    position: relative;
+}
+
+.progress-circle span {
+    position: absolute;
+    z-index: 1;
+}
+
+.progress-circle:after {
+    content: '';
+    width: 90px;
+    height: 90px;
+    background-color: black;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#focus-dot.blink {
+    animation: blink-animation 1s steps(5, start) infinite;
+}
+
+@keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
+}
+
+.reset {
+    margin-top: 20px; /* Add some space at the bottom */
+    padding: 10px 20px;
+    font-size: 1.8em; /* Match the text size */
+    cursor: pointer;
+    color: white;
+    text-decoration: underline;
+}
+
+/* Date Navigation Styles */
+.date-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 10px;
+}
+
+.date-navigation button {
+    background-color: #00bfff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 1em;
+    transition: background-color 0.2s;
+}
+
+.date-navigation button:hover {
+    background-color: #008cba;
+}
+
+#current-date {
+    font-size: 1.5em;
+    color: white;
+}

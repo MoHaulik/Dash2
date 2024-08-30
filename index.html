@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personligt Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="dashboard">
+        <div class="item">
+            <span class="title" onclick="increment('meal')">Måltid</span>
+            <span class="value" id="meal">0/3</span>
+        </div>
+        <div class="item">
+            <span class="title" onclick="incrementWater()">Vand</span>
+            <span class="value" id="water">0% (i alt 0.0 liter)</span>
+        </div>
+        <div class="progress-container">
+            <div class="progress-circle">
+                <span id="water-progress">0%</span>
+            </div>
+        </div>
+        <div class="item">
+            <span class="title" onclick="increment('training')">Træning</span>
+            <span class="value" id="training">0/1</span>
+        </div>
+        <div class="item">
+            <span class="title" onclick="incrementMinutes('mindfulness', 2, 25)">Mindfulness</span>
+            <span class="value" id="mindfulness">0/25 min</span>
+        </div>
+        <div class="item">
+            <span class="title" onclick="increment('breathing')">Vejrtrækning</span>
+            <span class="value" id="breathing">0/3</span>
+        </div>
+        <div class="item">
+            <span class="title" onclick="increment('posts')">Opslag</span>
+            <span class="value" id="posts">0</span>
+        </div>
+        <div class="item">
+            <span class="title" onclick="increment('messages')">Beskeder</span>
+            <span class="value" id="messages">0</span>
+        </div>
+        <div class="item">
+            <span class="title" onclick="increment('streak')">Striks</span>
+            <span class="value" id="streak">0</span>
+        </div>
+        <div class="item">
+            <span class="title" onclick="toggleFocus()">Fokus<span id="focus-dot">.</span></span>
+            <span class="value" id="focus">0/60 min.</span>
+        </div>
+    </div>
+    <div class="reset" onclick="resetAll()">Reset all</div>
+    
+    <!-- Date Navigation -->
+    <div class="date-navigation">
+        <button onclick="previousDate()">&#9664; Forrige</button>
+        <span id="current-date">30. august 2024</span>
+        <button onclick="nextDate()">Næste &#9654;</button>
+    </div>
+    
+    <audio id="click-sound" src="click.mp3" preload="auto"></audio>
+    <audio id="goal-sound" src="goal.mp3" preload="auto"></audio>
+    <script src="script.js"></script>
+</body>
+</html>
